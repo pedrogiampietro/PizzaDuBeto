@@ -21,6 +21,20 @@ const SignUp = () => {
               <input type="hidden" name="remember" defaultValue="true" />
               <div className="rounded-md shadow-sm -space-y-px">
                 <div>
+                  <label htmlFor="name" className="sr-only">
+                    Digite seu nome
+                  </label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    required
+                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm mb-2"
+                    placeholder="Digite seu Nome"
+                  />
+                </div>
+                <div>
                   <label htmlFor="email-address" className="sr-only">
                     Digite um e-mail
                   </label>
@@ -84,7 +98,7 @@ const SignUp = () => {
                       />
                     </svg>
                   </span>
-                  Entrar
+                  Registrar
                 </button>
               </div>
             </form>

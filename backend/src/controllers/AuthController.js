@@ -7,7 +7,7 @@ const path = require('path')
 
 const mailer = require('../services/mailer')
 
-const { accounts } = require('../models')
+const { Account } = require('../models')
 const {
   validateAccountSignUp,
   validateAccountSignIn,
@@ -30,11 +30,11 @@ const router = express.Router()
 
 router.post('/sign-in', validateAccountSignIn, async (req, res) => {
   const { name, password } = req.body
-  const findAccount = await accounts.findOne({ where: { name } })
+  const findAccount = await Account.findOne({ where: { name } })
 
   const encryptedPassword = encrypt(password)
 
-  const accountFound = await accounts.findOne({
+  const accountFound = await Account.findOne({
     where: { name, password: encryptedPassword },
   })
 
@@ -58,15 +58,15 @@ router.post('/sign-up', validateAccountSignUp, async (req, res) => {
 
   const hash = crypto.createHash('sha1').update(password).digest('hex')
 
-  const accountExists = await accounts.findOne({ where: { name } })
+  const accountExists = await Account.findOne({ where: { name } })
   if (accountExists)
     return res.jsonBadRequest(null, getMessage('account.signup.name_exists'))
 
-  const emails = await accounts.findOne({ where: { email } })
+  const emails = await Account.findOne({ where: { email } })
   if (emails)
     return res.jsonBadRequest(null, getMessage('account.signup.email_exists'))
 
-  const newAccount = await accounts.create({
+  const newAccount = await Account.create({
     name,
     password: hash,
     email,
@@ -100,7 +100,7 @@ router.put('/password', checkJwt, validateAccountChangePassword, async (req, res
 
     const decoded = verifyJwt(token)
 
-    const findAccount = await accounts.findByPk(decoded.id)
+    const findAccount = await Account.findByPk(decoded.id)
     if (!findAccount)
       return res.jsonUnauthorized(
         null,
@@ -130,7 +130,7 @@ router.put('/password', checkJwt, validateAccountChangePassword, async (req, res
 router.post('/forgot', async (req, res) => {
   const { email } = req.body
   try {
-    const findAccount = await accounts.findOne({ where: { email } })
+    const findAccount = await Account.findOne({ where: { email } })
 
     if (!findAccount)
       return res.jsonBadRequest(
@@ -174,7 +174,7 @@ router.post('/reset', async (req, res) => {
   const { email, token, password } = req.body
 
   try {
-    const findAccount = await accounts.findOne({
+    const findAccount = await Account.findOne({
       where: { email },
     })
 
@@ -222,7 +222,7 @@ router.put('/profile_info', checkJwt, async (req, res) => {
 
   const decoded = verifyJwt(token)
 
-  const findAccount = await accounts.findByPk(decoded.id)
+  const findAccount = await Account.findByPk(decoded.id)
   if (!findAccount)
     return res.jsonUnauthorized(null, getMessage('response.json_invalid_token'))
 
@@ -251,14 +251,14 @@ router.post('/profile_name', checkJwt, async (req, res) => {
 
     const decoded = verifyJwt(token)
 
-    const findAccount = await accounts.findByPk(decoded.id)
+    const findAccount = await Account.findByPk(decoded.id)
     if (!findAccount)
       return res.jsonUnauthorized(
         null,
         getMessage('response.json_invalid_token')
       )
 
-    const checkProfileName = await accounts.findOne({ where: { profileName } })
+    const checkProfileName = await Account.findOne({ where: { profileName } })
     if (checkProfileName)
       return res.jsonBadRequest(
         null,
@@ -286,7 +286,7 @@ router.post('/refresh', async (req, res) => {
 
   try {
     const decoded = verifyRefreshJwt(token)
-    const findAccount = await accounts.findByPk(decoded.id)
+    const findAccount = await Account.findByPk(decoded.id)
     if (!findAccount)
       return res.jsonUnauthorized(
         null,
@@ -322,7 +322,7 @@ router.post('/avatar', checkJwt, upload.single('avatar'), async (req, res) => {
 
     const decoded = verifyJwt(token)
 
-    const findAccount = await accounts.findByPk(decoded.id)
+    const findAccount = await Account.findByPk(decoded.id)
     if (!findAccount)
       return res.jsonUnauthorized(
         null,
@@ -354,7 +354,7 @@ router.get('/avatar', checkJwt, async (req, res) => {
 
     const decoded = verifyJwt(token)
 
-    const findAccount = await accounts.findByPk(decoded.id)
+    const findAccount = await Account.findByPk(decoded.id)
     if (!findAccount)
       return res.jsonUnauthorized(
         null,
@@ -384,7 +384,7 @@ router.delete('/avatarDelete', checkJwt, async (req, res) => {
 
     const decoded = verifyJwt(token)
 
-    const findAccount = await accounts.findByPk(decoded.id)
+    const findAccount = await Account.findByPk(decoded.id)
     if (!findAccount) return res.jsonUnauthorized(null, 'Invalid token.')
 
     const { avatar } = findAccount

@@ -30,7 +30,11 @@ const index = () => {
         <div class="grid grid-cols-4 col-gap-12 row-gap-16">
           {[1, 2, 3, 4, 5, 6, 7].map((p) => (
             <div className="w-64" key={p}>
-              <img className="h-40 mb-4 mx-auto" src={Pizza} alt="Pizza" />
+              <img
+                className="h-40 mb-4 mx-auto mt-12"
+                src={Pizza}
+                alt="Pizza"
+              />
               <div>
                 <h2 className="mb-4 text-lg">Marguerita</h2>
                 <span className="size py-1 px-4 rounded-full uppercase">

@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const accounts = sequelize.define('accounts', {
+  const Account = sequelize.define('Account', {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -22,11 +22,11 @@ module.exports = (sequelize, DataTypes) => {
     },
   })
 
-  accounts.prototype.toJSON = function () {
+  Account.prototype.toJSON = function () {
     const values = { ...this.get() }
     delete values.password
     return values
   }
 
-  return accounts
+  return Account
 }
