@@ -1,46 +1,23 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
-import Logo from '../../assets/images/logo.png'
-import Cart from '../../assets/images/cart.png'
+import NavBar from '../Layout/Nav'
+
 import Hero from '../../assets/images/hero-pizza.png'
 import Pizza from '../../assets/images/pizza.png'
 
 const index = () => {
   return (
     <>
-      <nav className="container mx-auto flex items-center justify-between py-4">
-        <div>
-          <img src={Logo} alt="LogoBeto" />
-        </div>
-        <div>
-          <ul className="flex items-center">
-            <li className="ml-6">
-              <Link to="/menu">Menu</Link>
-            </li>
-            <li className="ml-6">
-              <Link to="/menu">Ofertas</Link>
-            </li>
-            <li className="ml-6">
-              <Link to="/menu">Registrar</Link>
-            </li>
-            <li className="ml-6">
-              <Link to="/menu">Login</Link>
-            </li>
-            <li className="ml-6">
-              <Link to="/menu" className="inline-block px-4 py-2 rounded-full">
-                <img src={Cart} alt="CartIcone" />
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
+      <NavBar />
       <section className="hero py-16">
         <div className="container mx-auto flex items-center justify-between">
           <div className="w-1/2">
             <h6 className="text-lg">
               <em>Você está com fome?</em>
               <h1 className="text-6xl font-bold">Não espere !</h1>
+              <button className="px-6 py-2 rounded-full text-white font-bold mt-4 btn-primary">
+                Comprar Agora
+              </button>
             </h6>
           </div>
           <div className="w-1/2">
@@ -52,7 +29,7 @@ const index = () => {
         <h1 className="text-xl font-bold mb-8">Todas Pizzas</h1>
         <div class="grid grid-cols-4 col-gap-12 row-gap-16">
           {[1, 2, 3, 4, 5, 6, 7].map((p) => (
-            <div className="w-64">
+            <div className="w-64" key={p}>
               <img className="h-40 mb-4 mx-auto" src={Pizza} alt="Pizza" />
               <div>
                 <h2 className="mb-4 text-lg">Marguerita</h2>

@@ -62,3 +62,20 @@ section.hero {
   border-color: var(--pure);
   color: var(--pure);
 }
+
+.btn-primary {
+  background: var(--primary);
+  transition: var(--smooth);
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+section.cart {
+  background: var(--secondary);
+}
+
+.amount {
+  color: var(--primary);
+}
