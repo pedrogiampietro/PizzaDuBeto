@@ -19,10 +19,10 @@ const NavBar = () => {
             <Link to="/menu">Ofertas</Link>
           </li>
           <li className="ml-6">
-            <Link to="/menu">Registrar</Link>
+            <Link to="/sign-up">Registrar</Link>
           </li>
           <li className="ml-6">
-            <Link to="/menu">Login</Link>
+            <Link to="/sign-in">Login</Link>
           </li>
           <li className="ml-6">
             <Link to="/cart" className="inline-block px-4 py-2 rounded-full">
