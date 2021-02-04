@@ -8,7 +8,7 @@ const Menu = () => {
           <form action="#" method="POST">
             <div className="shadow sm:rounded-md sm:overflow-hidden">
               <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
-                <div className="grid grid-cols-5 gap-6">
+                <div className="grid grid-cols-4 gap-6">
                   <div className="col-span-3 sm:col-span-3">
                     <label
                       htmlFor="name-product"
@@ -47,7 +47,7 @@ const Menu = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-10 gap-6">
+                <div className="grid grid-cols-9 gap-6">
                   <div className="col-span-6 sm:col-span-3 lg:col-span-2">
                     <label
                       htmlFor="size"

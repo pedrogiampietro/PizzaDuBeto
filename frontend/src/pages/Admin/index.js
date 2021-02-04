@@ -1,9 +1,18 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { requestMenus } from '../../store/modules/menu/actions'
 
 import Menu from '../../components/Menu'
 import './styles.css'
 
 const AdminPanel = () => {
+  const dispatch = useDispatch()
+  const { menus } = useSelector((state) => state.menu)
+
+  React.useEffect(() => {
+    dispatch(requestMenus())
+  }, [])
+
   return (
     <>
       <nav id="header" className="bg-white fixed w-full z-10 top-0 shadow">
