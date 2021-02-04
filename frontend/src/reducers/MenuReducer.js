@@ -1,14 +1,14 @@
-import types from './types'
+import { MENU_LIST } from '../actions/MenuActions'
 
-const INITIAL_STATE = {
-  menu: {},
+const initialState = {
+  menu: null,
+  menus: [],
 }
 
-function menu(state = INITIAL_STATE, action) {
+export default function (state = initialState, action) {
   const { type, payload } = action
-
   switch (type) {
-    case types.REQUEST_MENUS: {
+    case MENU_LIST: {
       const response = payload ? payload.data : null
       const menu = response ? response.data : null
       return { ...state, menu }
@@ -18,5 +18,3 @@ function menu(state = INITIAL_STATE, action) {
       return state
   }
 }
-
-export default menu

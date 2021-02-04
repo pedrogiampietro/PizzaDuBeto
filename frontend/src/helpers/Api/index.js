@@ -15,7 +15,7 @@ export const getHeaders = () => {
 }
 
 export const apiRefreshToken = () => {
-  const url = getApiUrl('/account/refresh')
+  const url = getApiUrl('/auth/refresh')
   const refreshToken = getRefreshToken()
   const options = {
     headers: {

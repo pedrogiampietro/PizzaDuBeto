@@ -9,14 +9,16 @@ const router = express.Router()
 router.post('/', async (req, res) => {
   const { name, image, price, size } = req.body
 
-  const addMenu = await Menu.create({
-    name,
-    image,
-    price,
-    size,
-  })
+  console.log(req.body)
 
-  return res.jsonOK(addMenu)
+  // const addMenu = await Menu.create({
+  //   name,
+  //   image,
+  //   price,
+  //   size,
+  // })
+
+  return res.jsonOK()
 })
 
 router.get('/', async (req, res) => {
