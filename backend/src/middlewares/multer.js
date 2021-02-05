@@ -31,19 +31,19 @@ const upload = multer({
   },
 })
 
-// File upload middleware (for guild logo)
-const guildLogo = multer.diskStorage({
+// File upload middleware (for menu pictures)
+const menuPictures = multer.diskStorage({
   destination: 'uploads/menu-pictures/',
   filename: (req, file, cb) => {
     const filename = file.originalname
-    const finalFileName = `menu-pictures-${Date.now()}-${filename}`
+    const finalFileName = `menuPictures-${Date.now()}-${filename}`
 
     cb(null, finalFileName)
   },
 })
 
-const uploadGuildLogo = multer({
-  storage: guildLogo,
+const uploadMenuPictures = multer({
+  storage: menuPictures,
   limits: { fileSize: 2 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowedMimes = [
@@ -65,6 +65,6 @@ const uploadGuildLogo = multer({
 module.exports = {
   storage,
   upload,
-  guildLogo,
-  uploadGuildLogo,
+  menuPictures,
+  uploadMenuPictures,
 }

@@ -5,6 +5,10 @@ export const getApiUrl = (path) => {
   return `http://localhost:3001${path}`
 }
 
+export const getAvatarUrl = (path) => {
+  return `http://localhost:3001/${path}`
+}
+
 export const getHeaders = () => {
   const token = getToken()
 

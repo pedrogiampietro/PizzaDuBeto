@@ -1,21 +1,47 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getMenuList } from '../../actions/MenuActions'
-import { getFormData } from '../../helpers/FormData'
+import { getMenuList, addNewProduct } from '../../actions/MenuActions'
+import { getAvatarUrl } from '../../helpers/Api'
 
 import './styles.css'
 
 const AdminPanel = () => {
   const dispatch = useDispatch()
   const { menus } = useSelector((state) => state.menu)
+  const [menuList, setMenuList] = React.useState('')
+  const [image, setImage] = React.useState('')
+  const [name, setName] = React.useState('')
+  const [price, setPrice] = React.useState('')
+  const [size, setSize] = React.useState('')
+  const [imagePreview, setImagePreview] = React.useState('')
 
   React.useEffect(() => {
-    dispatch(getMenuList())
-  }, [])
+    dispatch(getMenuList()).then(({ payload }) => {
+      const newData = payload.data.data
+      setMenuList(newData)
+    })
+  }, [dispatch])
 
-  const submitHandler = (e) => {
-    e.preventDefault()
-    const data = getFormData(e)
+  function handleSelectImages(event) {
+    if (!event.target.files) {
+      return
+    }
+
+    const selectedImage = event.target.files[0]
+    setImage(selectedImage)
+    const preview = URL.createObjectURL(selectedImage)
+    setImagePreview(preview)
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault()
+    const formData = new FormData()
+    formData.append('name', name)
+    formData.append('price', price)
+    formData.append('size', size)
+    formData.append('image', image)
+    addNewProduct(formData)
   }
 
   return (
@@ -23,12 +49,12 @@ const AdminPanel = () => {
       <nav id="header" className="bg-white fixed w-full z-10 top-0 shadow">
         <div className="w-full container mx-auto flex flex-wrap items-center mt-0 pt-3 pb-3 md:pb-0">
           <div className="w-1/2 pl-2 md:pl-0">
-            <a
+            <Link
               className="text-gray-900 text-base xl:text-xl no-underline hover:no-underline font-bold"
-              href="#"
+              to="#"
             >
               <i className="fas fa-sun text-pink-600 pr-3" /> Admin Day Mode
-            </a>
+            </Link>
           </div>
           <div className="w-1/2 pr-0">
             <div className="flex relative inline-block float-right">
@@ -62,31 +88,31 @@ const AdminPanel = () => {
                 >
                   <ul className="list-reset">
                     <li>
-                      <a
-                        href="#"
+                      <Link
+                        to="#"
                         className="px-4 py-2 block text-gray-900 hover:bg-gray-400 no-underline hover:no-underline"
                       >
                         My account
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
-                        href="#"
+                      <Link
+                        to="#"
                         className="px-4 py-2 block text-gray-900 hover:bg-gray-400 no-underline hover:no-underline"
                       >
                         Notifications
-                      </a>
+                      </Link>
                     </li>
                     <li>
                       <hr className="border-t mx-2 border-gray-400" />
                     </li>
                     <li>
-                      <a
-                        href="#"
+                      <Link
+                        to="#"
                         className="px-4 py-2 block text-gray-900 hover:bg-gray-400 no-underline hover:no-underline"
                       >
                         Logout
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -114,49 +140,49 @@ const AdminPanel = () => {
           >
             <ul className="list-reset lg:flex flex-1 items-center px-4 md:px-0">
               <li className="mr-6 my-2 md:my-0">
-                <a
-                  href="#"
+                <Link
+                  to="#"
                   className="block py-1 md:py-3 pl-1 align-middle text-pink-600 no-underline hover:text-gray-900 border-b-2 border-orange-600 hover:border-orange-600"
                 >
                   <i className="fas fa-home fa-fw mr-3 text-pink-600" />
                   <span className="pb-1 md:pb-0 text-sm">Home</span>
-                </a>
+                </Link>
               </li>
               <li className="mr-6 my-2 md:my-0">
-                <a
-                  href="#"
+                <Link
+                  to="#"
                   className="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-900 border-b-2 border-white hover:border-pink-500"
                 >
                   <i className="fas fa-tasks fa-fw mr-3" />
                   <span className="pb-1 md:pb-0 text-sm">Tasks</span>
-                </a>
+                </Link>
               </li>
               <li className="mr-6 my-2 md:my-0">
-                <a
-                  href="#"
+                <Link
+                  to="#"
                   className="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-900 border-b-2 border-white hover:border-purple-500"
                 >
                   <i className="fa fa-envelope fa-fw mr-3" />
                   <span className="pb-1 md:pb-0 text-sm">Messages</span>
-                </a>
+                </Link>
               </li>
               <li className="mr-6 my-2 md:my-0">
-                <a
-                  href="#"
+                <Link
+                  to="#"
                   className="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-900 border-b-2 border-white hover:border-green-500"
                 >
                   <i className="fas fa-chart-area fa-fw mr-3" />
                   <span className="pb-1 md:pb-0 text-sm">Analytics</span>
-                </a>
+                </Link>
               </li>
               <li className="mr-6 my-2 md:my-0">
-                <a
-                  href="#"
+                <Link
+                  to="#"
                   className="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-900 border-b-2 border-white"
                 >
                   <i className="fa fa-wallet fa-fw mr-3" />
                   <span className="pb-1 md:pb-0 text-sm">Payments</span>
-                </a>
+                </Link>
               </li>
             </ul>
             <div className="relative pull-right pl-4 pr-4 md:pr-0">
@@ -336,7 +362,7 @@ const AdminPanel = () => {
                   {/* Adicionar Novo Produto no Menu */}
                   <div>
                     <div className="mt-5 md:mt-0 md:col-span-2">
-                      <form onSubmit={submitHandler}>
+                      <form onSubmit={handleSubmit}>
                         <div className="shadow sm:rounded-md sm:overflow-hidden">
                           <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                             <div className="grid grid-cols-4 gap-6">
@@ -355,6 +381,19 @@ const AdminPanel = () => {
                                   required
                                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm mb-2"
                                   placeholder="Pizza de Calabresa"
+                                  onChange={(event) =>
+                                    setName(
+                                      event.target.value
+                                        .toLowerCase()
+                                        .split(' ')
+                                        .map(
+                                          (word) =>
+                                            word.charAt(0).toUpperCase() +
+                                            word.slice(1)
+                                        )
+                                        .join(' ')
+                                    )
+                                  }
                                 />
                               </div>
 
@@ -373,6 +412,9 @@ const AdminPanel = () => {
                                     required
                                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm mb-2"
                                     placeholder="R$ 0,00"
+                                    onChange={(event) =>
+                                      setPrice(Number(event.target.value))
+                                    }
                                   />
                                 </div>
                               </div>
@@ -394,6 +436,9 @@ const AdminPanel = () => {
                                     required
                                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm mb-2"
                                     placeholder="37 CM"
+                                    onChange={(event) =>
+                                      setSize(Number(event.target.value))
+                                    }
                                   />
                                 </div>
                               </div>
@@ -415,10 +460,11 @@ const AdminPanel = () => {
                                         id="image-upload"
                                         name="image"
                                         type="file"
+                                        accept="image/*"
                                         className="sr-only"
+                                        onChange={handleSelectImages}
                                       />
                                     </label>
-                                    <p className="pl-1">or drag and drop</p>
                                   </div>
                                   <p className="text-xs text-gray-500">
                                     PNG, JPG, GIF up to 10MB
@@ -443,56 +489,113 @@ const AdminPanel = () => {
               </div>
               {/*/Graph Card*/}
             </div>
-
-            <div className="w-full md:w-1/2 xl:w-1/3 p-3">
+            <div className="w-full md:w-1/2 p-3">
               {/*Graph Card*/}
               <div className="bg-white border rounded shadow">
                 <div className="border-b p-3">
-                  <h5 className="font-bold uppercase text-gray-600">Graph</h5>
+                  <h5 className="font-bold uppercase text-gray-600">
+                    Graphics!
+                  </h5>
                 </div>
-                <div className="p-5">aqui também vai ficar algo</div>
+                <div className="p-5">aqui vai ficar outros graficos.</div>
               </div>
-              {/*/Graph Card*/}
             </div>
-            <div className="w-full p-3">
-              {/*Table Card*/}
+
+            <div className="w-full md:w-2/2 p-3">
+              {/*Graph Card*/}
               <div className="bg-white border rounded shadow">
                 <div className="border-b p-3">
-                  <h5 className="font-bold uppercase text-gray-600">Table</h5>
+                  <h5 className="font-bold uppercase text-gray-600">Menu!</h5>
                 </div>
                 <div className="p-5">
-                  <table className="w-full p-5 text-gray-700">
-                    <thead>
-                      <tr>
-                        <th className="text-left text-blue-900">Name</th>
-                        <th className="text-left text-blue-900">Side</th>
-                        <th className="text-left text-blue-900">Role</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Obi Wan Kenobi</td>
-                        <td>Light</td>
-                        <td>Jedi</td>
-                      </tr>
-                      <tr>
-                        <td>Greedo</td>
-                        <td>South</td>
-                        <td>Scumbag</td>
-                      </tr>
-                      <tr>
-                        <td>Darth Vader</td>
-                        <td>Dark</td>
-                        <td>Sith</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <p className="py-2">
-                    <a href="#">See More issues...</a>
-                  </p>
+                  <div className="flex flex-col">
+                    <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                      <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                        <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                          <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                              <tr>
+                                <th
+                                  scope="col"
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                  Nome do Produto
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                  Valor R$
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                  Tamanho
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                  Categoria
+                                </th>
+                                <th scope="col" className="relative px-6 py-3">
+                                  <span className="sr-only">Edit</span>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                              {menuList.rows?.map((product) => (
+                                <tr key={product.id}>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="flex items-center">
+                                      <div className="flex-shrink-0 h-10 w-10">
+                                        <img
+                                          className="h-10 w-10 rounded-full"
+                                          src={getAvatarUrl(product.image)}
+                                          alt={product.name}
+                                        />
+                                      </div>
+                                      <div className="ml-4">
+                                        <div className="text-sm font-medium text-gray-900">
+                                          {product.name}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="text-sm text-gray-900">
+                                      32,60
+                                    </div>
+                                    <div className="text-sm text-gray-500">
+                                      (Promoção)
+                                    </div>
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                      47CM
+                                    </span>
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    Massas
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <span className="text-indigo-600 hover:text-indigo-900">
+                                      Edit
+                                    </span>
+                                  </td>
+                                </tr>
+                              ))}
+                              {/* More items... */}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              {/*/table Card*/}
+              {/*/Graph Card*/}
             </div>
           </div>
           {/*/ Console Content*/}
@@ -517,28 +620,28 @@ const AdminPanel = () => {
                 <h3 className="font-bold font-bold text-gray-900">Social</h3>
                 <ul className="list-reset items-center text-sm pt-3">
                   <li>
-                    <a
+                    <Link
                       className="inline-block text-gray-600 no-underline hover:text-gray-900 hover:text-underline py-1"
-                      href="#"
+                      to="#"
                     >
                       Add social link
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
+                    <Link
                       className="inline-block text-gray-600 no-underline hover:text-gray-900 hover:text-underline py-1"
-                      href="#"
+                      to="#"
                     >
                       Add social link
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
+                    <Link
                       className="inline-block text-gray-600 no-underline hover:text-gray-900 hover:text-underline py-1"
-                      href="#"
+                      to="#"
                     >
                       Add social link
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>

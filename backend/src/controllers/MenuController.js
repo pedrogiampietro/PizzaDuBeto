@@ -4,21 +4,22 @@ const { Menu } = require('../models')
 const { getMessage } = require('../helpers/messages')
 const { checkJwt } = require('../middlewares/jwt')
 
+const { uploadMenuPictures } = require('../middlewares/multer')
+
 const router = express.Router()
 
-router.post('/', async (req, res) => {
-  const { name, image, price, size } = req.body
+router.post('/', uploadMenuPictures.single('image'), async (req, res) => {
+  const { name, price, size } = req.body
+  const finalFileName = req.file
 
-  console.log(req.body)
+  const addMenu = await Menu.create({
+    name,
+    image: `uploads/menu-pictures/${finalFileName.filename}`,
+    price,
+    size,
+  })
 
-  // const addMenu = await Menu.create({
-  //   name,
-  //   image,
-  //   price,
-  //   size,
-  // })
-
-  return res.jsonOK()
+  return res.jsonOK(addMenu)
 })
 
 router.get('/', async (req, res) => {
