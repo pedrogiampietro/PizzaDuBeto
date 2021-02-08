@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getMenuList, addNewProduct } from '../../actions/MenuActions'
 import { getAvatarUrl } from '../../helpers/Api'
-
+import { formatPrice } from '../../helpers/Utils/FormatPrice'
 import './styles.css'
 
 const AdminPanel = () => {
@@ -12,7 +12,7 @@ const AdminPanel = () => {
   const [menuList, setMenuList] = React.useState('')
   const [image, setImage] = React.useState('')
   const [name, setName] = React.useState('')
-  const [price, setPrice] = React.useState('')
+  const [price, setPrice] = React.useState(0)
   const [size, setSize] = React.useState('')
   const [imagePreview, setImagePreview] = React.useState('')
 
@@ -41,8 +41,19 @@ const AdminPanel = () => {
     formData.append('price', price)
     formData.append('size', size)
     formData.append('image', image)
-    addNewProduct(formData)
+    // addNewProduct(formData)
   }
+
+  const formatBRL = (value) => {
+    value = value.replace(/\D/g, '')
+
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value / 100)
+  }
+
+  console.log('***** price', price)
 
   return (
     <>
@@ -406,15 +417,14 @@ const AdminPanel = () => {
                                 </label>
                                 <div className="mt-1">
                                   <input
-                                    id="price"
+                                    type="text"
                                     name="price"
-                                    type="number"
-                                    required
                                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm mb-2"
-                                    placeholder="R$ 0,00"
-                                    onChange={(event) =>
-                                      setPrice(Number(event.target.value))
+                                    placeholder="Preço do Produto"
+                                    onChange={(e) =>
+                                      setPrice(formatBRL(e.target.value))
                                     }
+                                    value={price}
                                   />
                                 </div>
                               </div>
@@ -444,32 +454,43 @@ const AdminPanel = () => {
                               </div>
                             </div>
 
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700">
-                                Sua melhor foto da pizza!
-                              </label>
-                              <div className="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                                <div className="space-y-1 text-center">
-                                  <div className="flex text-sm text-gray-600">
-                                    <label
-                                      htmlFor="image-upload"
-                                      className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                                    >
-                                      <span>Upload a file</span>
-                                      <input
-                                        id="image-upload"
-                                        name="image"
-                                        type="file"
-                                        accept="image/*"
-                                        className="sr-only"
-                                        onChange={handleSelectImages}
-                                      />
-                                    </label>
+                            <div className="grid grid-cols-4 gap-6">
+                              <div className="col-span-3 sm:col-span-3">
+                                <div>
+                                  <label className="block text-sm font-medium text-gray-700">
+                                    Sua melhor foto da pizza!
+                                  </label>
+                                  <div className="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                    <div className="space-y-1 text-center">
+                                      <div className="flex text-sm text-gray-600">
+                                        <label
+                                          htmlFor="image-upload"
+                                          className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                                        >
+                                          <span>Upload a file</span>
+                                          <input
+                                            id="image-upload"
+                                            name="image"
+                                            type="file"
+                                            accept="image/*"
+                                            className="sr-only"
+                                            onChange={handleSelectImages}
+                                          />
+                                        </label>
+                                      </div>
+                                      <p className="text-xs text-gray-500">
+                                        PNG, JPG, GIF up to 10MB
+                                      </p>
+                                    </div>
                                   </div>
-                                  <p className="text-xs text-gray-500">
-                                    PNG, JPG, GIF up to 10MB
-                                  </p>
                                 </div>
+                              </div>
+                              <div className="col-span-1 sm:col-span-3 lg:col-span-1">
+                                <label
+                                  htmlFor="price"
+                                  className="block text-sm font-medium text-gray-700"
+                                ></label>
+                                <img src={imagePreview} alt="" />
                               </div>
                             </div>
                           </div>
@@ -565,7 +586,7 @@ const AdminPanel = () => {
                                   </td>
                                   <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="text-sm text-gray-900">
-                                      32,60
+                                      {formatPrice(product.price)}
                                     </div>
                                     <div className="text-sm text-gray-500">
                                       (Promoção)
