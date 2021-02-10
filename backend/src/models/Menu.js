@@ -12,11 +12,19 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL,
       allowNull: false,
     },
+    category: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     size: {
       type: DataTypes.INTEGER,
-      select: false,
+      allowNull: false,
     },
-  })
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  });
 
-  return Menu
-}
+  return Menu;
+};

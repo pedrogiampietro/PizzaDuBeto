@@ -1,59 +1,51 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { getMenuList, addNewProduct } from '../../actions/MenuActions'
-import { getAvatarUrl } from '../../helpers/Api'
-import { formatPrice } from '../../helpers/Utils/FormatPrice'
-import './styles.css'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getMenuList, addNewProduct } from '../../actions/MenuActions';
+import { getAvatarUrl } from '../../helpers/Api';
+import { formatBRL } from '../../helpers/Utils/FormatPrice';
+import './styles.css';
 
 const AdminPanel = () => {
-  const dispatch = useDispatch()
-  const { menus } = useSelector((state) => state.menu)
-  const [menuList, setMenuList] = React.useState('')
-  const [image, setImage] = React.useState('')
-  const [name, setName] = React.useState('')
-  const [price, setPrice] = React.useState(0)
-  const [size, setSize] = React.useState('')
-  const [imagePreview, setImagePreview] = React.useState('')
+  const dispatch = useDispatch();
+  const { menu } = useSelector((state) => state.menu);
+  const [menuList, setMenuList] = React.useState('');
+  const [image, setImage] = React.useState('');
+  const [name, setName] = React.useState('');
+  const [price, setPrice] = React.useState(0);
+  const [size, setSize] = React.useState('');
+  const [type, setType] = React.useState('CM');
+  const [category, setCategory] = React.useState('Massas');
+  const [imagePreview, setImagePreview] = React.useState('');
 
   React.useEffect(() => {
     dispatch(getMenuList()).then(({ payload }) => {
-      const newData = payload.data.data
-      setMenuList(newData)
-    })
-  }, [dispatch])
+      const newData = payload.data.data;
+      setMenuList(newData);
+    });
+  }, [dispatch]);
 
   function handleSelectImages(event) {
     if (!event.target.files) {
-      return
+      return;
     }
 
-    const selectedImage = event.target.files[0]
-    setImage(selectedImage)
-    const preview = URL.createObjectURL(selectedImage)
-    setImagePreview(preview)
+    const selectedImage = event.target.files[0];
+    setImage(selectedImage);
+    const preview = URL.createObjectURL(selectedImage);
+    setImagePreview(preview);
   }
 
   function handleSubmit(event) {
-    event.preventDefault()
-    const formData = new FormData()
-    formData.append('name', name)
-    formData.append('price', price)
-    formData.append('size', size)
-    formData.append('image', image)
-    // addNewProduct(formData)
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('price', price);
+    formData.append('size', size);
+    formData.append('type', type);
+    formData.append('image', image);
+    addNewProduct(formData);
   }
-
-  const formatBRL = (value) => {
-    value = value.replace(/\D/g, '')
-
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(value / 100)
-  }
-
-  console.log('***** price', price)
 
   return (
     <>
@@ -430,13 +422,13 @@ const AdminPanel = () => {
                               </div>
                             </div>
 
-                            <div className="grid grid-cols-9 gap-6">
-                              <div className="col-span-6 sm:col-span-3 lg:col-span-2">
+                            <div className="grid grid-cols-5 gap-12">
+                              <div className="col-span-6 sm:col-span-6 lg:col-span-1">
                                 <label
                                   htmlFor="size"
                                   className="block text-sm font-medium text-gray-700"
                                 >
-                                  Tamanho do Produto (EX: 40 CM)
+                                  Tamanho do Produto
                                 </label>
                                 <div className="mt-1">
                                   <input
@@ -445,20 +437,64 @@ const AdminPanel = () => {
                                     type="number"
                                     required
                                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm mb-2"
-                                    placeholder="37 CM"
+                                    placeholder=""
                                     onChange={(event) =>
                                       setSize(Number(event.target.value))
                                     }
                                   />
                                 </div>
                               </div>
+                              <div className="col-span-6 sm:col-span-12 lg:col-span-1">
+                                <label
+                                  htmlFor="type"
+                                  className="block text-sm font-medium text-gray-700"
+                                >
+                                  Tipo do Tamanho
+                                </label>
+
+                                <div className="mt-1">
+                                  <select
+                                    id="type"
+                                    name="type"
+                                    className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    onChange={(e) => setType(e.target.value)}
+                                  >
+                                    <option value="CM">CM</option>
+                                    <option value="LT">LT</option>
+                                    <option value="ML">ML</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div className="col-span-1 sm:col-span-3 lg:col-span-1">
+                                <label
+                                  htmlFor="category"
+                                  className="block text-sm font-medium text-gray-700"
+                                >
+                                  Categoria do Produto
+                                </label>
+
+                                <div className="mt-1">
+                                  <select
+                                    id="category"
+                                    name="category"
+                                    className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    onChange={(e) =>
+                                      setCategory(e.target.value)
+                                    }
+                                  >
+                                    <option value="Massas">Massas</option>
+                                    <option value="Bebidas">Bebidas</option>
+                                    <option value="Petiscos">Petiscos</option>
+                                  </select>
+                                </div>
+                              </div>{' '}
                             </div>
 
                             <div className="grid grid-cols-4 gap-6">
                               <div className="col-span-3 sm:col-span-3">
                                 <div>
                                   <label className="block text-sm font-medium text-gray-700">
-                                    Sua melhor foto da pizza!
+                                    Sua melhor foto do produto!
                                   </label>
                                   <div className="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                                     <div className="space-y-1 text-center">
@@ -586,7 +622,7 @@ const AdminPanel = () => {
                                   </td>
                                   <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="text-sm text-gray-900">
-                                      {formatPrice(product.price)}
+                                      {formatBRL(product.price)}
                                     </div>
                                     <div className="text-sm text-gray-500">
                                       (Promoção)
@@ -594,7 +630,7 @@ const AdminPanel = () => {
                                   </td>
                                   <td className="px-6 py-4 whitespace-nowrap">
                                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                      47CM
+                                      {product.size} CM
                                     </span>
                                   </td>
                                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -671,7 +707,7 @@ const AdminPanel = () => {
         </div>
       </footer>
     </>
-  )
-}
+  );
+};
 
-export default AdminPanel
+export default AdminPanel;
