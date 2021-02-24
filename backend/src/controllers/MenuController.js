@@ -12,20 +12,18 @@ router.post('/', uploadMenuPictures.single('image'), async (req, res) => {
   const { name, price, size, type, category } = req.body;
   const finalFileName = req.file;
 
-  const removeDollar = price.slice(3, price.length).replace(',', '.');
+  const removeDollar = price.slice(3, price.length).replace(',', '');
 
-  console.log(req.body);
+  const addMenu = await Menu.create({
+    name,
+    image: `uploads/menu-pictures/${finalFileName.filename}`,
+    price: parseFloat(removeDollar).toFixed(2),
+    size,
+    type,
+    category,
+  });
 
-  // const addMenu = await Menu.create({
-  //   name,
-  //   image: `uploads/menu-pictures/${finalFileName.filename}`,
-  //   price: Number(removeDollar).toFixed(2),
-  //   size,
-  //   type,
-  //   category,
-  // });
-
-  // return res.jsonOK(addMenu);
+  return res.jsonOK(addMenu);
 });
 
 router.get('/', async (req, res) => {

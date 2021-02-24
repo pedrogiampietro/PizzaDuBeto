@@ -43,7 +43,11 @@ const AdminPanel = () => {
     formData.append('price', price);
     formData.append('size', size);
     formData.append('type', type);
+    formData.append('category', category);
     formData.append('image', image);
+
+    console.log(formData);
+
     addNewProduct(formData);
   }
 
